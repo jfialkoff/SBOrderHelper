@@ -55,11 +55,13 @@ function updatePathDropdown(sheet, editedRow) {
 
   // Get the Inventory ID for the edited row.
   const inventoryId = sheet.getRange(editedRow, inventoryIdColumn).getValue();
+  const pathCell = sheet.getRange(editedRow, pathColumn);
+  pathCell.clearDataValidations();
+  pathCell.setValue("Loading...");
 
   // If the Inventory ID is empty, clear the dropdown and exit.
   if (!inventoryId) {
-    const pathCell = sheet.getRange(editedRow, pathColumn);
-    pathCell.clearDataValidations();
+    pathCell.setValue('Choose an item');
     return;
   }
 
@@ -82,13 +84,18 @@ function updatePathDropdown(sheet, editedRow) {
     .map(row => row[ohLabelColumn - 1]);
 
   // Set the new data validation rule for the "Path" cell.
-  const pathCell = sheet.getRange(editedRow, pathColumn);
   if (pathOptions.length > 0) {
     const rule = SpreadsheetApp.newDataValidation()
       .requireValueInList(pathOptions)
       .setAllowInvalid(false) // Prevents users from entering values not in the list.
       .build();
     pathCell.setDataValidation(rule);
+
+    // Automatically select the first option that starts with an asterisk.
+    const defaultOption = pathOptions.find(option => String(option).startsWith('*'));
+    if (defaultOption) {
+      pathCell.setValue(defaultOption);
+    }
   } else {
     // If no matching paths are found, clear any existing validation.
     pathCell.clearDataValidations();
