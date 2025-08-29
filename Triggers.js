@@ -1,11 +1,3 @@
-// Global constants for sheet names and headers to centralize configuration.
-const ORDER_SHEET_NAME = "Order";
-const PATHS_SHEET_NAME = "Paths";
-const ITEM_HEADER = "Item";
-const PATH_HEADER = "Path";
-const INVENTORY_ID_HEADER = "Inventory ID";
-const OH_LABEL_HEADER = "OH Label";
-
 /**
  * A simple onEdit trigger that checks if the edited cell is in the
  * correct column and then calls the main function to update the dropdown.
@@ -13,6 +5,7 @@ const OH_LABEL_HEADER = "OH Label";
  * @param {Object} e The event object containing information about the edit.
  */
 function onEdit(e) {
+  console.log("Starting onEdit");
   // Exit if the event object is undefined, which happens when running manually.
   if (!e) {
     return;
@@ -28,7 +21,8 @@ function onEdit(e) {
   }
 
   // Get the headers from the first row to find column indices.
-  const headers = sheet.getRange(7, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const headerRow = findRowByValue(sheet, 1, "Item");
+  const headers = sheet.getRange(headerRow, 1, 1, sheet.getLastColumn()).getValues()[0];
   const itemColumn = headers.indexOf(ITEM_HEADER) + 1;
 
   // Exit if the edited column is not the "Item" column.
@@ -49,7 +43,10 @@ function onEdit(e) {
  */
 function updatePathDropdown(sheet, editedRow) {
   // Get the headers from the current sheet to find column indices.
-  const headers = sheet.getRange(7, 1, 1, sheet.getLastColumn()).getValues()[0];
+  console.log("Starting updatePathDropdown");
+  const headerRow = findRowByValue(sheet, 1, "Item");
+  const headers = sheet.getRange(headerRow, 1, 1, sheet.getLastColumn()).getValues()[0];
+  console.log(headers);
   const pathColumn = headers.indexOf(PATH_HEADER) + 1;
   const inventoryIdColumn = headers.indexOf(INVENTORY_ID_HEADER) + 1;
 
@@ -111,7 +108,7 @@ function testUpdatePathDropdown() {
   const orderSheet = ss.getSheetByName(ORDER_SHEET_NAME);
   
   // Choose a row number to test.
-  const testRow = 8; 
+  const testRow = findRowByValue(orderSheet, 1, "Item") + 1;; 
 
   if (orderSheet) {
     console.log(`Testing dropdown update for row ${testRow}...`);

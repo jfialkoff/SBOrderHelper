@@ -1,7 +1,8 @@
-  // Define the sheet and columns to monitor.
-  const orderSheetName = "Order";
-  const pathsSheetName = "Paths";
-  const itemHeader = "Item";
-  const pathHeader = "Path";
-  const inventoryIdHeader = "Inventory ID";
-  const ohLabelHeader = "OH Label";
+// Global constants for sheet names and headers to centralize configuration.
+const ORDER_SHEET_NAME = "Order";
+const PATHS_SHEET_NAME = "Paths";
+const ITEM_HEADER = "Item";
+const PATH_HEADER = "Path";
+const INVENTORY_ID_HEADER = "Inventory ID";
+const OH_LABEL_HEADER = "OH Label";
+const ISSUES_SHEET_NAME = 'Issues';
